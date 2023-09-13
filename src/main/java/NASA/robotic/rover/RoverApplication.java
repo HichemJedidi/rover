@@ -14,11 +14,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@SpringBootApplication
+
 public class RoverApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(RoverApplication.class, args);
+		//SpringApplication.run(RoverApplication.class, args);
 		if (args.length == 0) {
 			System.out.println("Merci de préciser le fichier d'entrée");
 			return;
@@ -44,13 +44,18 @@ public class RoverApplication {
 					System.out.println(rover.getX() + " " + rover.getY() + " " + rover.getDirection());
 				}
 			}
-		} catch (IOException e) {
+		}catch (IndexOutOfBoundsException e) {
+			System.out.println("Erreur, merci de vérifier les ligne de fichier il manque des ligne d'entre");
+			e.printStackTrace();
+		}
+		catch (IOException e) {
 			System.out.println("Erreur, merci de vérifier votre fichier d'entrée");
 			e.printStackTrace();
 		} catch (RuntimeException e) {
 			System.out.println("Erreur, votre fichier d'entrée n'est pas valide");
 			e.printStackTrace();
 		}
+
 	}
 
 }
