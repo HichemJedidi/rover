@@ -4,12 +4,13 @@ import NASA.robotic.rover.entities.Plateau;
 import NASA.robotic.rover.entities.Rover;
 import NASA.robotic.rover.enums.Direction;
 
+import NASA.robotic.rover.enums.MoveActions;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.runner.RunWith;
+import org.mockito.*;
+import org.mockito.junit.MockitoJUnitRunner;
 
 
 import static org.junit.Assert.assertEquals;
@@ -18,24 +19,23 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.*;
 
 public class RoverServiceTest {
-    @Mock
+
     @InjectMocks
     private RoverService roverService;
 
 
-    private Plateau plateau;
+
+    @Mock
     private Rover roverMock;
+    @Mock
     private Plateau plateauMock;
     private String steps;
     private Rover rover,roverExeption;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-         roverMock = mock(Rover.class);
-         plateauMock = mock(Plateau.class);
         steps="LMLMLMLMM";
-
         roverExeption = Rover.builder()
                 .x(4)
                 .y(3)
@@ -48,14 +48,12 @@ public class RoverServiceTest {
                 .direction(Direction.N)
                 .plateau(plateauMock)
                 .build();
-
     }
 
     @Test
     public void testMoveRover() {
-
-
-        setUpInitialRoverState();
+        when(plateauMock.getWidth()).thenReturn(5);
+        when(plateauMock.getHeight()).thenReturn(5);
         roverService.move(rover, steps);
         assertEquals(1, rover.getX());
         assertEquals(3, rover.getY());
@@ -79,14 +77,11 @@ public class RoverServiceTest {
         verify(roverMock, times((int) leftCount + (int) rightCount)).setDirection(any());
     }
 
-
-
     @Test
     public void testMoveRoverOutsidePlateau() throws RuntimeException{
         assertThrows(RuntimeException.class, () -> roverService.move(roverExeption, "MMMMM"));
 
     }
-
 
     private void setUpInitialRoverState() {
         when(roverMock.getX()).thenReturn(1);
@@ -96,4 +91,6 @@ public class RoverServiceTest {
         when(plateauMock.getWidth()).thenReturn(5);
         when(plateauMock.getHeight()).thenReturn(5);
     }
+
+
 }

@@ -18,12 +18,11 @@ import java.util.stream.Stream;
 public class RoverApplication {
 
 	public static void main(String[] args) {
-		//SpringApplication.run(RoverApplication.class, args);
 		if (args.length == 0) {
 			System.out.println("Merci de préciser le fichier d'entrée");
 			return;
 		}
-
+		RoverService roverService = new RoverService();
 		try (Stream<String> lines = Files.lines(Paths.get(args[0]))) {
 			List<String> inputLines = lines.collect(Collectors.toList());
 			if (inputLines != null && !inputLines.isEmpty()) {
@@ -39,7 +38,8 @@ public class RoverApplication {
 					Rover rover = new Rover(x, y, Direction.valueOf(direction), plateau);
 
 					String steps = inputLines.get(i + 1);
-					RoverService.move(rover, steps);
+
+					roverService.move(rover, steps);
 
 					System.out.println(rover.getX() + " " + rover.getY() + " " + rover.getDirection());
 				}
